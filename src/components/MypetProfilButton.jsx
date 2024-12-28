@@ -3,7 +3,7 @@ import "../styles/mypetprofil.css";
 
 const MypetProfilButton = ({ onClick, petInfo }) => {
   return (
-    <div onClick={onClick} className="petProfilContainer ml-96">
+    <div onClick={onClick} className="petProfilContainer">
       <div className="myPetProfilPhoto">
         <img src="" alt="" />
       </div>
