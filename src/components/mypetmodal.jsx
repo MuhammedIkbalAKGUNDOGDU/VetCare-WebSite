@@ -33,6 +33,10 @@ const Modal = ({ isOpen, onClose, petInfo }) => {
         <div onClick={handlePetClick} className="VetButton">
           Veteriner Randevu al
         </div>
+        <div className="bg-blue-600 flex justify-center items-center mt-4 rounded-lg py-3 cursor-pointer">
+          {" "}
+          <p className="text-white font-bold text-xl">Hayvan Sağlığını Görüntüle </p>
+        </div>
         <div className="bg-red-600 flex justify-center items-center mt-4 rounded-lg py-3 cursor-pointer">
           {" "}
           <p className="text-white font-bold text-xl">Hayvanı Sil</p>

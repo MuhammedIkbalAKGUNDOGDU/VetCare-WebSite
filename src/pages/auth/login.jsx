@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/auth/login.css";
 import loginPhoto from "../../assets/images/login.webp";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
-function login() {
+function Login() {
   const navigate = useNavigate(); // Initialize the navigate function
+  const [isChecked, setIsChecked] = useState(false); // Radiobutton'ın durumunu kontrol etmek için
+
+  const handleRadioButtonChange = () => {
+    setIsChecked((prev) => !prev); // Radiobutton seçimini tersine çevirir
+  };
 
   return (
     <div className="loginContainer">
       <div className="loginForm">
         <div className="loginBrand">
-          <h1>Evcil Hayvanım</h1>
+          <h1 className="font-bold text-2xl">Evcil Hayvanım</h1>
         </div>
         <div className="flexmid">
           <div className="LoginWelcome">
@@ -30,7 +35,7 @@ function login() {
           </div>
           <div className="formElements">
             <input
-              className="login-input"
+              className="login-input border p-2"
               type="email"
               id="email"
               placeholder="E postanı gir"
@@ -38,15 +43,23 @@ function login() {
             />
             <label
               className="green underlined login-label"
-              for="password"
+              htmlFor="password"
             ></label>
             <input
-              className="login-input"
+              className="login-input  border p-2"
               type="password"
               id="password"
               placeholder="Şifreni gir"
               required
-            />{" "}
+            />
+            <label>
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={handleRadioButtonChange}
+              />
+              Veterinerim
+            </label>
             <div className="loginContinueButton">Continue</div>
           </div>
         </div>
@@ -61,4 +74,4 @@ function login() {
   );
 }
 
-export default login;
+export default Login;

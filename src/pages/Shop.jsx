@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import ShopItem from "../components/shopItem";
+import { useNavigate } from "react-router-dom";
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
-
   const categories = ["Electronics", "Clothing", "Books", "Home Appliances"];
-
+  const navigate = useNavigate();
   const handleChange = (event) => {
     setSelectedCategory(event.target.value);
   };
@@ -51,6 +51,12 @@ const Shop = () => {
           </option>
         ))}
       </select>
+      <h1
+        onClick={() => navigate("/order-history")}
+        className="text-xl mt-8 font-bold mb-4 mx-6 rounded-xl bg-red-500 p-2 text-white cursor-pointer max-w-xs h-auto text-center"
+      >
+        Order History
+      </h1>
       {productInfo.map((productInfo, index) => (
         <ShopItem productInfo={productInfo} key={index} />
       ))}

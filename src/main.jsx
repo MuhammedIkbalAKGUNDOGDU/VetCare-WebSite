@@ -7,7 +7,7 @@ import Register from "./pages/auth/register";
 import LandingPage from "./pages/landingPage";
 import Shop from "./pages/Shop";
 import VeterinerScreen from "./pages/veterinerScreen";
-
+import OrderHistory from "./pages/orderHistory";
 const Main = () => {
   return (
     <Router>
@@ -21,6 +21,7 @@ const Main = () => {
 
         {/* Diğer Sayfalar */}
         <Route path="/shop" element={<Shop />} />
+        <Route path="/order-history" element={<OrderHistory />} />
         <Route path="/veteriner" element={<VeterinerScreen />} />
       </Routes>
     </Router>
