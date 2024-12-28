@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  margin: 0%;
+  padding: 0%;
+}
+
+p {
+  margin: 0%;
+}
+
+.landingPageContainer {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+.landingPageProfileContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  padding: 2%;
+}
+.landingPageOtherContainer {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Yalnızca dikey kaydırma */
+  max-height: 100vh; /* Yükseklik sınırı */
+}
+
+.profilphoto {
+  margin-top: 10%;
+  border-radius: 50%;
+  width: 100px;
+}
+.shopping {
+  border-radius: 12px;
+  background-color: orange;
+  color: black;
+  font-weight: bold;
+  padding: 2%;
+  margin-top: 5%;
+}
+.shopping:hover {
+  cursor: pointer;
+}
+
+.name {
+  margin-top: 5%;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.surname {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.telno {
+  font-weight: bold;
+  font-size: 1.25rem;
+}

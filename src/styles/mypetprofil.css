@@ -1,0 +1,39 @@
+.petProfilContainer {
+  display: flex;
+  border-radius: 12px;
+  padding: 2%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+  border: 1px solid #d1d5db; /* Yumuşak gri bir sınır */
+  width: 40%;
+  margin-top: 2%;
+  position: relative;
+}
+.myPetProfilPhoto {
+  background-color: gray;
+  width: 70px; /* Eni ve boyu eşit yap */
+  height: 70px;
+  border-radius: 50%;
+}
+.petinnerCont {
+  margin-left: 2%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.flexrow {
+  display: flex;
+  gap: 10px;
+  color: gray;
+}
+.big {
+  font-size: 3rem;
+  color: black;
+}
+.spacebetwen {
+  justify-content: space-between;
+}
+
+.petProfilContainer:hover {
+  cursor: pointer;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+}

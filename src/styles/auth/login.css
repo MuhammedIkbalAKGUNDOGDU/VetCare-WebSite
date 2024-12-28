@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  margin: 0%;
+  padding: 0%;
+}
+.loginContainer {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  height: 100vh;
+}
+
+.loginPhoto {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Taşmalar engellenir */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginPhoto img {
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.LoginWelcome {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 10%;
+  p {
+    color: gray;
+    font-size: 0.8rem;
+  }
+  h3 {
+    margin: 0%;
+  }
+}
+
+.loginOrRegisterButton {
+  display: flex;
+  margin-top: 10%;
+  background-color: rgb(206, 203, 203);
+  padding: 0.3%;
+  border-radius: 10px;
+  gap: 10px;
+
+  .active {
+    background-color: white;
+    border-radius: 10px;
+  }
+}
+
+.loginswitch {
+  border-radius: 10px;
+  padding: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 10rem;
+  text-align: center;
+  p {
+    font-weight: bold;
+  }
+}
+.loginswitch:hover {
+  cursor: pointer;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+}
+.login-label {
+  margin-top: 5%;
+  font-size: 24px;
+}
+
+.login-input {
+  height: 3rem;
+  width: 100%;
+  border-radius: 15px;
+}
+.login-input::placeholder {
+  font-size: 1rem;
+  color: gray;
+}
+
+.formElements {
+  margin-top: 10%;
+  width: 332px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.loginContinueButton {
+  background-color: rgb(62, 62, 209);
+  width: 340px;
+  border-radius: 15px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  margin-top: 2%;
+}
+
+.loginContinueButton:hover {
+  cursor: pointer;
+  background-color: rgb(21, 21, 136);
+}
+.loginFooterText {
+  color: gray;
+  p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .loginPhoto {
+    display: none;
+  }
+  .loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
