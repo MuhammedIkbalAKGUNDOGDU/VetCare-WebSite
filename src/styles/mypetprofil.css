@@ -12,7 +12,6 @@
   background-color: gray;
   width: 70px; /* Eni ve boyu eşit yap */
   height: 70px;
-  border-radius: 50%;
 }
 .petinnerCont {
   margin-left: 2%;
