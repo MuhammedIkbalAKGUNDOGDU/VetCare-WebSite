@@ -7,7 +7,7 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
 
   const [formData, setFormData] = useState({
     petID: petInfo.petID || "",
-    ownerID: petInfo.ownerID || "",  // Pet sahibinin ID'si
+    ownerID: petInfo.ownerID || "", // Pet sahibinin ID'si
     vetID: "",
     date: "",
     time: "",
@@ -32,7 +32,6 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
       if (appointmentResponse.data.isSuccess) {
         alert("Appointment successfully registered!");
         console.log(appointmentResponse.data);
-
         // Randevu başarılıysa, pet'in veteriner tarihini güncelle
         const vetUpdateResponse = await axios.put(
           "http://localhost:8081/pet/update_vetdate",
@@ -45,6 +44,14 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
         if (vetUpdateResponse.data.isSuccess) {
           alert("Pet vet date updated successfully!");
           console.log(vetUpdateResponse.data);
+          try {
+            const notification = await axios.get( //bunun datasını yazdırmak lazım aşşağıya
+              "http://localhost:8081/api/notifications"
+            );
+            console.log("selamlar", notification.data);
+          } catch (error) {
+            console.error("Error registering notification", error);
+          }
         } else {
           alert("Failed to update pet vet date.");
         }
@@ -53,7 +60,7 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
       console.error("Error registering appointment or updating pet:", error);
       alert("An error occurred while processing the appointment.");
     } finally {
-      onClose();  // Modalı kapat
+      onClose(); // Modalı kapat
     }
   };
 

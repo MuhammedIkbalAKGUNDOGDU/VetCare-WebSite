@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
+import Vetlogin from "./pages/auth/vetlogin";
+import Vetregister from "./pages/auth/vetregister";
 import LandingPage from "./pages/landingPage";
 import Shop from "./pages/Shop";
 import VeterinerScreen from "./pages/veterinerScreen";
@@ -18,6 +20,8 @@ const Main = () => {
         {/* Auth Sayfaları */}
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />} />
+        <Route path="/auth/vetlogin" element={<Vetlogin />} />
+        <Route path="/auth/vetregister" element={<Vetregister />} />
 
         {/* Diğer Sayfalar */}
         <Route path="/shop" element={<Shop />} />

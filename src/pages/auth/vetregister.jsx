@@ -1,26 +1,20 @@
 import React, { useState } from "react";
-import axios from "axios";  // Axios import edildi
+import axios from "axios"; // Axios import edildi
 import "../../styles/auth/login.css";
 import loginPhoto from "../../assets/images/login.webp";
 import { useNavigate } from "react-router-dom"; // useNavigate hook'u import edildi
 
-function Register() {
+function vetregister() {
   const navigate = useNavigate();
-  const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
-    tcKimlik: "",
-    phoneNumber: "",
+    shopName: "",
+    address: "",
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
-
-  const handleRadioButtonChange = () => {
-    setIsChecked((prev) => !prev);
-    navigate("/auth/vetregister")
-  };
 
   // Form verilerini güncelle
   const handleInputChange = (e) => {
@@ -35,13 +29,13 @@ function Register() {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8081/owner/owner_register",
+        "http://localhost:8081/vet/vet_register",
         formData
       );
       console.log("Kayıt Başarılı:", response.data);
 
       if (response.data.isSuccess === true) {
-        navigate("/auth/login");  // Kayıt başarılıysa login sayfasına yönlendir
+        navigate("/auth/vetlogin"); // Kayıt başarılıysa login sayfasına yönlendir
       } else {
         setError("Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.");
       }
@@ -92,20 +86,20 @@ function Register() {
             />
             <input
               className="login-input border p-2"
-              type="number"
-              id="tcKimlik"
-              value={formData.tcKimlik}
+              type="text"
+              id="shopName"
+              value={formData.shopName}
               onChange={handleInputChange}
-              placeholder="TC No gir"
+              placeholder="Dükkan Adını Girin"
               required
             />
             <input
               className="login-input border p-2"
-              type="number"
-              id="phoneNumber"
-              value={formData.phoneNumber}
+              type="text"
+              id="address"
+              value={formData.address}
               onChange={handleInputChange}
-              placeholder="Telefon Numarası gir"
+              placeholder="Adres Girin"
               required
             />
             <input
@@ -126,17 +120,10 @@ function Register() {
               placeholder="Şifreni gir"
               required
             />
-            <label>
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={handleRadioButtonChange}
-              />
-              Veterinerim
-            </label>
+
             <div
               className="loginContinueButton"
-              onClick={handleSubmit}  // Kayıt butonuna tıklanınca handleSubmit çağrılır
+              onClick={handleSubmit} // Kayıt butonuna tıklanınca handleSubmit çağrılır
             >
               Continue
             </div>
@@ -154,4 +141,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default vetregister;
