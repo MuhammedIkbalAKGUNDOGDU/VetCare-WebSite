@@ -7,6 +7,7 @@ import Register from "./pages/auth/register";
 import Vetlogin from "./pages/auth/vetlogin";
 import Vetregister from "./pages/auth/vetregister";
 import LandingPage from "./pages/landingPage";
+import LandingPageVet from "./pages/landingPageVet";
 import Shop from "./pages/Shop";
 import VeterinerScreen from "./pages/veterinerScreen";
 import OrderHistory from "./pages/orderHistory";
@@ -16,6 +17,7 @@ const Main = () => {
       <Routes>
         {/* Ana Sayfa */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/vetHomePage" element={<LandingPageVet />} />
 
         {/* Auth Sayfaları */}
         <Route path="/auth/login" element={<Login />} />
