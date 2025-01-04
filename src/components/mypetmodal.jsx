@@ -1,23 +1,48 @@
 import React, { useState } from "react";
+import axios from "axios"; // Axios eklendi
 import "../styles/modal.css";
 import { useNavigate } from "react-router-dom";
 import Vetmodal from "./vetmodal";
+
 const Modal = ({ isOpen, onClose, petInfo }) => {
-  const navigate = useNavigate(); // `useNavigate` doğru şekilde çağırıldı
+  const navigate = useNavigate();
   const [isvetOpen, setIsvetOpen] = useState(false);
   const [selectedPetID, setSelectedPetID] = useState(null);
 
+  // Pet silme fonksiyonu
+  const handleDeletePet = async () => {
+    const confirmDelete = window.confirm(
+      `${petInfo.name} isimli hayvanı silmek istediğinizden emin misiniz?`
+    );
+
+    if (confirmDelete) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:8081/pet/pet_delete/${petInfo.petID}`
+        );
+        console.log("Hayvan silindi:", response.data);
+        alert("Hayvan başarıyla silindi.");
+        onClose(); // Modalı kapat
+        navigate("/"); // Silme işleminden sonra anasayfaya yönlendir
+      } catch (error) {
+        console.error("Hayvan silinirken hata oluştu:", error);
+        alert("Hayvan silinemedi. Lütfen tekrar deneyin.");
+      }
+    }
+  };
+
   const handlePetClick = (petInfo) => {
     console.log("Pet bilgisi:", petInfo);
-    setSelectedPetID(petInfo); // Tıklanan pet bilgilerini set et
-    setIsvetOpen(true); // Modal'ı aç
+    setSelectedPetID(petInfo);
+    setIsvetOpen(true);
   };
 
   const closeModal = () => {
-    setIsvetOpen(false); // Modal'ı kapat
-    setSelectedPetID(null); // Seçilen bilgiyi temizle
+    setIsvetOpen(false);
+    setSelectedPetID(null);
   };
-  if (!isOpen) return null; // Modal kapalıysa hiçbir şey render edilmez
+
+  if (!isOpen) return null;
 
   return (
     <div className="modalOverlay">
@@ -29,19 +54,26 @@ const Modal = ({ isOpen, onClose, petInfo }) => {
         <p>Tür: {petInfo.type}</p>
         <p>Yaş: {petInfo.age}</p>
         <p>Son Veteriner Tarihi: {petInfo.lastVetDate}</p>
-        <p>Son Aşı Tarihi: {petInfo.lastVetDate}</p>
+        <p>Son Aşı Tarihi: {petInfo.lastVaccinationDate}</p>
+
         <div onClick={handlePetClick} className="VetButton">
           Veteriner Randevu al
         </div>
+
         <div className="bg-blue-600 flex justify-center items-center mt-4 rounded-lg py-3 cursor-pointer">
-          {" "}
-          <p className="text-white font-bold text-xl">Hayvan Sağlığını Görüntüle </p>
+          <p className="text-white font-bold text-xl">
+            Hayvan Sağlığını Görüntüle{" "}
+          </p>
         </div>
-        <div className="bg-red-600 flex justify-center items-center mt-4 rounded-lg py-3 cursor-pointer">
-          {" "}
+
+        <div
+          onClick={handleDeletePet} // Silme fonksiyonunu tetikleyen buton
+          className="bg-red-600 flex justify-center items-center mt-4 rounded-lg py-3 cursor-pointer"
+        >
           <p className="text-white font-bold text-xl">Hayvanı Sil</p>
         </div>
       </div>
+
       <Vetmodal isOpen={isvetOpen} onClose={closeModal} petInfo={petInfo} />
     </div>
   );

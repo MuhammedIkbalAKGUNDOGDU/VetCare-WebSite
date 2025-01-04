@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../styles/mypetprofil.css";
 
-const vetmodal = ({ isOpen, onClose, petInfo }) => {
-  if (!isOpen) return null; // Modal kapalıysa hiçbir şey render edilmez
+const VetModal = ({ isOpen, onClose, petInfo }) => {
+  if (!isOpen) return null; // Modal kapalıysa render edilmez
 
   const [formData, setFormData] = useState({
-    petID: petInfo.ID || "",
-    ownerID: "",
+    petID: petInfo.petID || "",
+    ownerID: petInfo.ownerID || "",  // Pet sahibinin ID'si
     vetID: "",
     date: "",
     time: "",
@@ -19,18 +19,41 @@ const vetmodal = ({ isOpen, onClose, petInfo }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Randevu oluşturma ve pet güncelleme işlemi
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
+      // Randevu kaydetme isteği
+      const appointmentResponse = await axios.post(
         "http://localhost:8081/appointment/appointment_register",
         formData
       );
-      alert("Appointment successfully registered!");
-      console.log(response.data);
+
+      if (appointmentResponse.data.isSuccess) {
+        alert("Appointment successfully registered!");
+        console.log(appointmentResponse.data);
+
+        // Randevu başarılıysa, pet'in veteriner tarihini güncelle
+        const vetUpdateResponse = await axios.put(
+          "http://localhost:8081/pet/update_vetdate",
+          {
+            petId: formData.petID,
+            date: formData.date,
+          }
+        );
+
+        if (vetUpdateResponse.data.isSuccess) {
+          alert("Pet vet date updated successfully!");
+          console.log(vetUpdateResponse.data);
+        } else {
+          alert("Failed to update pet vet date.");
+        }
+      }
     } catch (error) {
-      console.error("Error registering appointment:", error);
-      alert("An error occurred while registering the appointment.");
+      console.error("Error registering appointment or updating pet:", error);
+      alert("An error occurred while processing the appointment.");
+    } finally {
+      onClose();  // Modalı kapat
     }
   };
 
@@ -47,7 +70,7 @@ const vetmodal = ({ isOpen, onClose, petInfo }) => {
             name="petID"
             placeholder="Pet ID"
             value={formData.petID}
-            readOnly // Kullanıcı tarafından düzenlenemez
+            readOnly // Kullanıcı tarafından değiştirilemez
             className="border rounded-lg p-2"
             required
           />
@@ -56,7 +79,7 @@ const vetmodal = ({ isOpen, onClose, petInfo }) => {
             name="ownerID"
             placeholder="Owner ID"
             value={formData.ownerID}
-            readOnly // Kullanıcı tarafından düzenlenemez
+            readOnly // Kullanıcı tarafından değiştirilemez
             className="border rounded-lg p-2"
             required
           />
@@ -103,4 +126,4 @@ const vetmodal = ({ isOpen, onClose, petInfo }) => {
   );
 };
 
-export default vetmodal;
+export default VetModal;

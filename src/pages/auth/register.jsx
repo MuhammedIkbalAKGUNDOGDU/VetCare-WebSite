@@ -1,15 +1,55 @@
 import React, { useState } from "react";
+import axios from "axios";  // Axios import edildi
 import "../../styles/auth/login.css";
 import loginPhoto from "../../assets/images/login.webp";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { useNavigate } from "react-router-dom"; // useNavigate hook'u import edildi
 
-function register() {
-  const navigate = useNavigate(); // Initialize the navigate function
-  const [isChecked, setIsChecked] = useState(false); // Radiobutton'ın durumunu kontrol etmek için
+function Register() {
+  const navigate = useNavigate();
+  const [isChecked, setIsChecked] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    surname: "",
+    tcKimlik: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
 
   const handleRadioButtonChange = () => {
-    setIsChecked((prev) => !prev); // Radiobutton seçimini tersine çevirir
+    setIsChecked((prev) => !prev);
   };
+
+  // Form verilerini güncelle
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  // Formu gönder
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/owner/owner_register",
+        formData
+      );
+      console.log("Kayıt Başarılı:", response.data);
+
+      if (response.data.isSuccess === true) {
+        navigate("/auth/login");  // Kayıt başarılıysa login sayfasına yönlendir
+      } else {
+        setError("Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.");
+      }
+    } catch (error) {
+      setError("Sunucuyla bağlantı kurulamadı. Lütfen tekrar deneyin.");
+      console.error("Kayıt sırasında hata oluştu:", error);
+    }
+  };
+
   return (
     <div className="loginContainer">
       <div className="loginForm">
@@ -34,74 +74,72 @@ function register() {
             <input
               className="login-input border p-2"
               type="text"
-              id="email"
+              id="name"
+              value={formData.name}
+              onChange={handleInputChange}
               placeholder="Adını gir"
               required
             />
-            <label
-              className="green underlined login-label "
-              for="password"
-            ></label>
             <input
               className="login-input border p-2"
               type="text"
-              id="email"
+              id="surname"
+              value={formData.surname}
+              onChange={handleInputChange}
               placeholder="Soyadını gir"
               required
-            />{" "}
-            <label
-              className="green underlined login-label"
-              for="password"
-            ></label>
+            />
             <input
               className="login-input border p-2"
               type="number"
-              id="email"
+              id="tcKimlik"
+              value={formData.tcKimlik}
+              onChange={handleInputChange}
               placeholder="TC No gir"
               required
-            />{" "}
-            <label
-              className="green underlined login-label"
-              for="password"
-            ></label>
+            />
             <input
               className="login-input border p-2"
               type="number"
-              id="email"
+              id="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
               placeholder="Telefon Numarası gir"
               required
-            />{" "}
-            <label
-              className="green underlined login-label"
-              for="password"
-            ></label>
+            />
             <input
               className="login-input border p-2"
               type="email"
               id="email"
+              value={formData.email}
+              onChange={handleInputChange}
               placeholder="E postanı gir"
               required
-            />{" "}
-            <label
-              className="green underlined login-label"
-              for="password"
-            ></label>
+            />
             <input
               className="login-input border p-2"
               type="password"
               id="password"
+              value={formData.password}
+              onChange={handleInputChange}
               placeholder="Şifreni gir"
               required
-            />{" "}
+            />
             <label>
               <input
-                type="checkbox" // Radiobutton yerine checkbox kullanarak seçimi kaldırmayı kolaylaştırıyoruz
+                type="checkbox"
                 checked={isChecked}
                 onChange={handleRadioButtonChange}
               />
               Veterinerim
             </label>
-            <div className="loginContinueButton">Continue</div>
+            <div
+              className="loginContinueButton"
+              onClick={handleSubmit}  // Kayıt butonuna tıklanınca handleSubmit çağrılır
+            >
+              Continue
+            </div>
+            {error && <p className="error-message">{error}</p>}
           </div>
         </div>
         <div className="loginFooterText">
@@ -115,4 +153,4 @@ function register() {
   );
 }
 
-export default register;
+export default Register;

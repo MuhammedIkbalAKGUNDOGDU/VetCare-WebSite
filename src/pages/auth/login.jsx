@@ -1,14 +1,41 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "../../styles/auth/login.css";
 import loginPhoto from "../../assets/images/login.webp";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const navigate = useNavigate(); // Initialize the navigate function
-  const [isChecked, setIsChecked] = useState(false); // Radiobutton'ın durumunu kontrol etmek için
+  const navigate = useNavigate();
+  const [isChecked, setIsChecked] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleRadioButtonChange = () => {
-    setIsChecked((prev) => !prev); // Radiobutton seçimini tersine çevirir
+    setIsChecked((prev) => !prev);
+  };
+
+  const handleSubmit = async () => {
+    const loginData = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/owner/login_owner",
+        loginData
+      );
+      if (response.data.isSuccess === true) {
+        console.log("Giriş başarılı:", response.data);
+        navigate("/"); // Başarılı giriş sonrası yönlendirme
+      } else {
+        setError("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.");
+      }
+    } catch (error) {
+      setError("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.");
+      console.error("Hata oluştu:", error);
+    }
   };
 
   return (
@@ -38,17 +65,17 @@ function Login() {
               className="login-input border p-2"
               type="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="E postanı gir"
               required
             />
-            <label
-              className="green underlined login-label"
-              htmlFor="password"
-            ></label>
             <input
-              className="login-input  border p-2"
+              className="login-input border p-2"
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Şifreni gir"
               required
             />
@@ -60,7 +87,10 @@ function Login() {
               />
               Veterinerim
             </label>
-            <div className="loginContinueButton">Continue</div>
+            <div className="loginContinueButton" onClick={handleSubmit}>
+              Continue
+            </div>
+            {error && <p className="error-message">{error}</p>}
           </div>
         </div>
         <div className="loginFooterText">

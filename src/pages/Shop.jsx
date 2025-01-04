@@ -1,39 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ShopItem from "../components/shopItem";
 import { useNavigate } from "react-router-dom";
+
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const categories = ["Electronics", "Clothing", "Books", "Home Appliances"];
+  const [products, setProducts] = useState([]);
+  const categories = ["Mama", "Oyuncak"];
   const navigate = useNavigate();
+
+  // Kategori değiştiğinde çağrılan fonksiyon
   const handleChange = (event) => {
     setSelectedCategory(event.target.value);
   };
 
-  const productInfo = [
-    {
-      ID: 1,
-      name: "Karabaş",
-      category: "Shiba",
-      price: "123",
-      stock: "12",
-    },
-    {
-      ID: 1,
-      name: "Karabaş",
-      category: "Shiba",
-      price: "23",
-      stock: "12",
-    },
-    {
-      ID: 1,
-      name: "selam",
-      category: "Shiba",
-      price: "321",
-      stock: "12",
-    },
+  // Seçilen kategoriye göre ürünleri getir
+  useEffect(() => {
+    if (selectedCategory) {
+      const fetchProducts = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8081/product/getProductsByCategory/${selectedCategory}`
+          );
+          if (response.data.isSuccess) {
+            setProducts(response.data.data);
+            console.log("Ürünler:", response.data.data);
+          } else {
+            setProducts([]);
+            console.log("Ürün bulunamadı.");
+          }
+        } catch (error) {
+          console.error("Ürünler getirilirken hata oluştu:", error);
+        }
+      };
 
-    // Diğer pet bilgilerini buraya ekleyin
-  ];
+      fetchProducts();
+    }
+  }, [selectedCategory]); // selectedCategory değiştiğinde tetiklenir
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4 mx-6">Choose a Category</h1>
@@ -51,15 +55,23 @@ const Shop = () => {
           </option>
         ))}
       </select>
+
       <h1
         onClick={() => navigate("/order-history")}
         className="text-xl mt-8 font-bold mb-4 mx-6 rounded-xl bg-red-500 p-2 text-white cursor-pointer max-w-xs h-auto text-center"
       >
         Order History
       </h1>
-      {productInfo.map((productInfo, index) => (
-        <ShopItem productInfo={productInfo} key={index} />
-      ))}
+
+      <div className="mx-6 mt-6">
+        {products.length > 0 ? (
+          products.map((product, index) => (
+            <ShopItem productInfo={product} key={index} />
+          ))
+        ) : (
+          <p className="text-gray-500">Bu kategoride ürün bulunamadı.</p>
+        )}
+      </div>
     </div>
   );
 };

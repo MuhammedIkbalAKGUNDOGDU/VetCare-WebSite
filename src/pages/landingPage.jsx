@@ -1,49 +1,87 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/landingPage.css";
 import MypetProfilButton from "../components/MypetProfilButton.jsx";
 import Modal from "../components/mypetmodal.jsx";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LandingPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // Yeni modal için state
   const [selectedPetInfo, setSelectedPetInfo] = useState(null);
+  const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [newPet, setNewPet] = useState({
+    name: "",
+    type: "",
+    age: "",
+    healthStatus: "Healthy",
+    lastVaccinationDate: "",
+    vaccinationFreq: "",
+    lastVetDate: "",
+    vetFreq: "",
+    ownerID: 7, // Sabit bir ownerID giriyoruz. Giriş yapan kullanıcının ID'si alınabilir.
+  });
+
   const navigate = useNavigate();
+
+  // Pet tıklama işlemi
   const handlePetClick = (petInfo) => {
     console.log("Pet bilgisi:", petInfo);
-    setSelectedPetInfo(petInfo); // Tıklanan pet bilgilerini set et
-    setIsModalOpen(true); // Modal'ı aç
+    setSelectedPetInfo(petInfo);
+    setIsModalOpen(true);
   };
 
+  // Modal kapatma işlemi
   const closeModal = () => {
-    setIsModalOpen(false); // Modal'ı kapat
-    setSelectedPetInfo(null); // Seçilen bilgiyi temizle
+    setIsModalOpen(false);
+    setSelectedPetInfo(null);
   };
 
-  const pets = [
-    {
-      ID: 1,
-      name: "Karabaş",
-      type: "Shiba",
-      age: "17 Yaşında",
-      lastVetDate: "11.12.2023",
-    },
-    {
-      ID: 2,
-      name: "Pamuk",
-      type: "Golden Retriever",
-      age: "5 Yaşında",
-      lastVetDate: "01.01.2024",
-    },
-    {
-      ID: 3,
-      name: "Ömer",
-      type: "İnsan",
-      age: "21 Yaşında",
-      lastVetDate: "01.01.2024",
-    },
+  // Petleri çekme işlemi
+  useEffect(() => {
+    const fetchPetsByOwnerID = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8081/pet/petsByOwnerID/7"
+        );
+        console.log("Gelen Pet Bilgileri:", response.data);
+        setPets(response.data.data);
+      } catch (error) {
+        console.error("Hata oluştu:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // Diğer pet bilgilerini buraya ekleyin
-  ];
+    fetchPetsByOwnerID();
+  }, []);
+
+  // Formdaki değişiklikleri izleme
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setNewPet((prevPet) => ({
+      ...prevPet,
+      [id]: value,
+    }));
+  };
+
+  // Pet ekleme isteği
+  const handleAddPet = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/pet/pet_register",
+        newPet
+      );
+      console.log("Pet başarıyla eklendi:", response.data);
+      setIsAddModalOpen(false); // Modalı kapat
+      // Listeyi güncelle
+      setPets((prevPets) => [...prevPets, response.data.data]);
+    } catch (error) {
+      console.error("Pet eklenirken hata oluştu:", error);
+    }
+  };
 
   return (
     <div className="landingPageContainer">
@@ -55,7 +93,14 @@ const LandingPage = () => {
         <div onClick={() => navigate("/shop")} className="shopping">
           Alışveriş Yap
         </div>
+        <div
+          onClick={() => setIsAddModalOpen(true)} // Pet ekleme modalını aç
+          className="shopping"
+        >
+          Pet Ekle
+        </div>
       </div>
+
       <div className="landingPageOtherContainer">
         {pets.map((pet, index) => (
           <MypetProfilButton
@@ -71,6 +116,74 @@ const LandingPage = () => {
         onClose={closeModal}
         petInfo={selectedPetInfo}
       />
+
+      {/* Pet Ekleme Modalı */}
+      {isAddModalOpen && (
+        <div className="modalOverlay">
+          <div className="modalContent">
+            <h2>Yeni Pet Ekle</h2>
+            <input
+              id="name"
+              type="text"
+              placeholder="Pet Adı"
+              value={newPet.name}
+              onChange={handleInputChange}
+            />
+            <input
+              id="type"
+              type="text"
+              placeholder="Tür"
+              value={newPet.type}
+              onChange={handleInputChange}
+            />
+            <input
+              id="age"
+              type="number"
+              placeholder="Yaş"
+              value={newPet.age}
+              onChange={handleInputChange}
+            />
+            <p>Son Aşır Tarihi</p>
+            <input
+              id="lastVaccinationDate"
+              type="date"
+              placeholder="Son Aşı Tarihi"
+              value={newPet.lastVaccinationDate}
+              onChange={handleInputChange}
+            />
+            <p></p>
+            <input
+              id="vaccinationFreq"
+              type="number"
+              placeholder="Aşı Sıklığı (ay)"
+              value={newPet.vaccinationFreq}
+              onChange={handleInputChange}
+            />
+            <p>Son Veteriner Tarihi</p>
+            <input
+              id="lastVetDate"
+              type="date"
+              placeholder="Son Veteriner Tarihi"
+              value={newPet.lastVetDate}
+              onChange={handleInputChange}
+            />
+            <p></p>
+            <input
+              id="vetFreq"
+              type="number"
+              placeholder="Veteriner Sıklığı (ay)"
+              value={newPet.vetFreq}
+              onChange={handleInputChange}
+            />
+            <button className="ml-2" onClick={handleAddPet}>
+              Kaydet
+            </button>
+            <button className="ml-2" onClick={() => setIsAddModalOpen(false)}>
+              İptal
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
