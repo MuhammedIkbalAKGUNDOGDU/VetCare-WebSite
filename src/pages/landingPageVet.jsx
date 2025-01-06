@@ -4,14 +4,34 @@ import axios from "axios";
 
 const LandingPageVet = () => {
   const [appointments, setAppointments] = useState([]);
-  const vetID = 1; // Örneğin Vet ID 1
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const vetID = userData; // Örneğin Vet ID 1
+  const [ownerData, setOwnerData] = useState(null);
+
+  const fetchOwnerData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/vet/findVetById/${userData}` // ownerID kullanımı
+      );
+      setOwnerData(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Veri çekilirken hata oluştu:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userData) {
+      fetchOwnerData();
+    }
+  }, [userData]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8081/vet/listAppointments/${vetID}`)
+      .get(`http://localhost:8081/vet/listAppointments/${userData}`)
       .then((response) => {
         setAppointments(response.data.data); // API'den dönen veriyi state'e kaydet
-        console.log(response.data.data);
+        console.log("randevular", response.data.data);
       })
       .catch((error) => {
         console.error("Randevular çekilirken hata oluştu:", error);
@@ -21,9 +41,15 @@ const LandingPageVet = () => {
   return (
     <div className="landingPageContainer">
       <div className="landingPageProfileContainer">
-        <p className="name">Muhammed İkbal</p>
-        <p className="surname">AKGÜNDOĞDU</p>
-        <p className="telno">05358249994</p>
+        {ownerData ? (
+          <>
+            <p className="name">{ownerData.name}</p>
+            <p className="surname">{ownerData.surname}</p>
+            <p className="telno">{ownerData.phoneNumber}</p>
+          </>
+        ) : (
+          <p>Veri yükleniyor...</p>
+        )}
       </div>
 
       <div className="landingPageOtherContainer">

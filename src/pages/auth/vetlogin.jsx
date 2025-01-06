@@ -23,7 +23,8 @@ function vetlogin() {
       );
       if (response.data.isSuccess === true) {
         console.log("Giriş başarılı:", response.data);
-        navigate("/"); // Başarılı giriş sonrası yönlendirme
+        localStorage.setItem("userData", JSON.stringify(response.data.data));
+        navigate("/vetHomePage"); // Başarılı giriş sonrası yönlendirme
       } else {
         setError("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.");
       }

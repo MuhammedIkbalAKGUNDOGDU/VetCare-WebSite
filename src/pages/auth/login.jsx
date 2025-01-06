@@ -28,7 +28,7 @@
           loginData
         );
         if (response.data.isSuccess === true) {
-          console.log("Giriş başarılı:", response.data);
+          localStorage.setItem("userData", JSON.stringify(response.data.data));
           navigate("/"); // Başarılı giriş sonrası yönlendirme
         } else {
           setError("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.");

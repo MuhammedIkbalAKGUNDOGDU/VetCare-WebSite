@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const LandingPage = () => {
+  const [ownerData, setOwnerData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false); // Yeni modal için state
   const [selectedPetInfo, setSelectedPetInfo] = useState(null);
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const userData = JSON.parse(localStorage.getItem("userData"));
 
   const [newPet, setNewPet] = useState({
     name: "",
@@ -21,10 +23,38 @@ const LandingPage = () => {
     vaccinationFreq: "",
     lastVetDate: "",
     vetFreq: "",
-    ownerID: 7, // Sabit bir ownerID giriyoruz. Giriş yapan kullanıcının ID'si alınabilir.
+    ownerID: { userData }, // Sabit bir ownerID giriyoruz. Giriş yapan kullanıcının ID'si alınabilir.
   });
 
+  useEffect(() => {
+    if (userData) {
+      setNewPet((prevPet) => ({
+        ...prevPet,
+        ownerID: userData, // Burada userData doğrudan ownerID'ye atanıyor
+      }));
+    }
+  }, [userData]);
+
   const navigate = useNavigate();
+
+  const fetchOwnerData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/owner/findOwnerById/${userData}` // ownerID kullanımı
+      );
+      setOwnerData(response.data.data);
+      console.log(response.data.data);
+      console.log("ownerID", userData);
+    } catch (error) {
+      console.error("Veri çekilirken hata oluştu:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userData) {
+      fetchOwnerData();
+    }
+  }, [userData]);
 
   // Pet tıklama işlemi
   const handlePetClick = (petInfo) => {
@@ -44,7 +74,7 @@ const LandingPage = () => {
     const fetchPetsByOwnerID = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8081/pet/petsByOwnerID/7"
+          `http://localhost:8081/pet/petsByOwnerID/${userData}`
         );
         console.log("Gelen Pet Bilgileri:", response.data);
         setPets(response.data.data);
@@ -86,9 +116,15 @@ const LandingPage = () => {
   return (
     <div className="landingPageContainer">
       <div className="landingPageProfileContainer">
-        <p className="name">Muhammed İkbal</p>
-        <p className="surname">AKGÜNDOĞDU</p>
-        <p className="telno">05358249994</p>
+        {ownerData ? (
+          <>
+            <p className="name">{ownerData.name}</p>
+            <p className="surname">{ownerData.surname}</p>
+            <p className="telno">{ownerData.phoneNumber}</p>
+          </>
+        ) : (
+          <p>Veri yükleniyor...</p>
+        )}
 
         <div onClick={() => navigate("/shop")} className="shopping">
           Alışveriş Yap

@@ -6,8 +6,11 @@ import { useNavigate } from "react-router-dom";
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]); // Sepet state
+  const [totalPrice, setTotalPrice] = useState(0); // Toplam fiyat
   const categories = ["Mama", "Oyuncak"];
   const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("userData"));
 
   // Kategori değiştiğinde çağrılan fonksiyon
   const handleChange = (event) => {
@@ -36,7 +39,55 @@ const Shop = () => {
 
       fetchProducts();
     }
-  }, [selectedCategory]); // selectedCategory değiştiğinde tetiklenir
+  }, [selectedCategory]);
+
+  // Ürün tıklandığında sepete ekleme fonksiyonu
+  const handleAddToCart = (productId) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item.id === productId);
+
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prevCart, { id: productId, quantity: 1 }];
+      }
+    });
+  };
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // Aylar 0-11 arasında olduğu için +1
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Siparişi gönderme fonksiyonu
+  const handleOrderSubmit = async () => {
+    const sepetDTO = {
+      ownerID: userData, // Kullanıcı ID
+      productIDs: cart.map((item) => item.id), // Ürün ID'leri
+      orderDate: formatDate(new Date()), // Tarihi formatla
+      quantities: cart.map((item) => item.quantity), // Ürün miktarları
+    };
+    console.log(sepetDTO);
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/order/totalOrderPrice",
+        sepetDTO
+      );
+      console.log("Sipariş başarıyla gönderildi:", response.data);
+      setTotalPrice(response.data.totalPrice); // Backend'den gelen toplam tutar
+      setCart([]); // Sepeti temizle
+      alert("Siparişiniz başarıyla alındı!");
+    } catch (error) {
+      console.error("Sipariş gönderilirken hata oluştu:", error);
+      alert("Sipariş gönderilirken bir hata oluştu.");
+    }
+  };
 
   return (
     <div>
@@ -66,11 +117,39 @@ const Shop = () => {
       <div className="mx-6 mt-6">
         {products.length > 0 ? (
           products.map((product, index) => (
-            <ShopItem productInfo={product} key={index} />
+            <div
+              key={index}
+              onClick={() => handleAddToCart(product.productID)}
+              className="cursor-pointer"
+            >
+              <ShopItem productInfo={product} />
+            </div>
           ))
         ) : (
           <p className="text-gray-500">Bu kategoride ürün bulunamadı.</p>
         )}
+      </div>
+
+      <div className="mx-6 mt-6">
+        <h2 className="text-xl font-bold mt-8">Sepet</h2>
+        {cart.length > 0 ? (
+          cart.map((item, index) => (
+            <p key={index}>
+              Ürün ID: {item.id} - Miktar: {item.quantity}
+            </p>
+          ))
+        ) : (
+          <p className="text-gray-500">Sepetiniz boş.</p>
+        )}
+
+        <p className="font-bold mt-2 text-xl">Tutar : {totalPrice} TL</p>
+
+        <div
+          onClick={handleOrderSubmit}
+          className="bg-lime-500 w-fit p-2 px-6 mt-3 rounded-2xl font-bold text-white text-xl cursor-pointer"
+        >
+          Sipariş Ver
+        </div>
       </div>
     </div>
   );
