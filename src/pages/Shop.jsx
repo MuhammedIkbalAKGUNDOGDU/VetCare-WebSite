@@ -42,21 +42,40 @@ const Shop = () => {
   }, [selectedCategory]);
 
   // Ürün tıklandığında sepete ekleme fonksiyonu
-  const handleAddToCart = (productId) => {
+  const handleAddToCart = (product) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === productId);
+      const existingItem = prevCart.find((item) => item.id === product.productID);
 
       if (existingItem) {
-        return prevCart.map((item) =>
-          item.id === productId
+        const updatedCart = prevCart.map((item) =>
+          item.id === product.productID
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
+        calculateTotalPrice(updatedCart); // Fiyatı güncelle
+        return updatedCart;
       } else {
-        return [...prevCart, { id: productId, quantity: 1 }];
+        const updatedCart = [
+          ...prevCart,
+          { id: product.productID, quantity: 1, price: product.price }
+        ];
+        calculateTotalPrice(updatedCart); // Fiyatı güncelle
+        return updatedCart;
       }
     });
   };
+
+  // "3 al 2 öde" kampanyasına göre toplam fiyatı hesapla
+  const calculateTotalPrice = (cartItems) => {
+    let total = 0;
+    cartItems.forEach((item) => {
+      const freeItems = Math.floor(item.quantity / 3); // 3 üründen 1 tanesi bedava
+      const paidItems = item.quantity - freeItems;  // Ödenecek ürün sayısı
+      total += paidItems * item.price;
+    });
+    setTotalPrice(total);
+  };
+
   const formatDate = (date) => {
     const d = new Date(date);
     const year = d.getFullYear();
@@ -80,7 +99,6 @@ const Shop = () => {
         sepetDTO
       );
       console.log("Sipariş başarıyla gönderildi:", response.data);
-      setTotalPrice(response.data.totalPrice); // Backend'den gelen toplam tutar
       setCart([]); // Sepeti temizle
       alert("Siparişiniz başarıyla alındı!");
     } catch (error) {
@@ -119,7 +137,7 @@ const Shop = () => {
           products.map((product, index) => (
             <div
               key={index}
-              onClick={() => handleAddToCart(product.productID)}
+              onClick={() => handleAddToCart(product)}
               className="cursor-pointer"
             >
               <ShopItem productInfo={product} />
@@ -135,7 +153,7 @@ const Shop = () => {
         {cart.length > 0 ? (
           cart.map((item, index) => (
             <p key={index}>
-              Ürün ID: {item.id} - Miktar: {item.quantity}
+              Ürün ID: {item.id} - Miktar: {item.quantity} - Fiyat: {item.price} TL
             </p>
           ))
         ) : (

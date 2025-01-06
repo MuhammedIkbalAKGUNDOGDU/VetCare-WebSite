@@ -127,7 +127,7 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
               <option value="">Veteriner Seç</option>
               {vets.map((vet) => (
                 <option key={vet.vetID} value={vet.vetID}>
-                  {vet.name} - ⭐ {vet.starRate}
+                  {vet.shopName} - ⭐ {vet.starRate}
                 </option>
               ))}
             </select>

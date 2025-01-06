@@ -103,14 +103,7 @@ const Modal = ({ isOpen, onClose, petInfo }) => {
           <div className="mt-4">
             <h3 className="font-bold">Sağlık Bilgileri</h3>
             <p>
-              <strong>Sağlık Durumu:</strong> {petHealthDetails.healthStatus}
-            </p>
-            <p>
-              <strong>Son Aşı Tarihi:</strong>{" "}
-              {petHealthDetails.lastVaccinationDate}
-            </p>
-            <p>
-              <strong>Veteriner Notları:</strong> {petHealthDetails.vetNotes}
+              <strong>Sağlık Durumu:</strong> {petHealthDetails}
             </p>
           </div>
         )}
