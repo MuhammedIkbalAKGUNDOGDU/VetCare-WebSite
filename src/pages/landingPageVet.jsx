@@ -43,9 +43,10 @@ const LandingPageVet = () => {
       <div className="landingPageProfileContainer">
         {ownerData ? (
           <>
-            <p className="name">{ownerData.name}</p>
-            <p className="surname">{ownerData.surname}</p>
-            <p className="telno">{ownerData.phoneNumber}</p>
+            <p className="telno">Dükkan Adı : {ownerData.shopName}</p>
+            <p className="telno">Yıldız Puanı : {ownerData.starRate}</p>
+            <p className="telno">Veteriner ID : {ownerData.vetID}</p>
+            <p className="font-bold text-xs">E-mail : {ownerData.email}</p>
           </>
         ) : (
           <p>Veri yükleniyor...</p>

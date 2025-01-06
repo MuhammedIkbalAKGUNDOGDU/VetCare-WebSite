@@ -67,6 +67,7 @@ const LandingPage = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedPetInfo(null);
+    window.location.reload(); // Sayfayı tamamen yeniler
   };
 
   // Petleri çekme işlemi
@@ -106,8 +107,7 @@ const LandingPage = () => {
       );
       console.log("Pet başarıyla eklendi:", response.data);
       setIsAddModalOpen(false); // Modalı kapat
-      // Listeyi güncelle
-      setPets((prevPets) => [...prevPets, response.data.data]);
+      window.location.reload(); // Sayfayı tamamen yeniler
     } catch (error) {
       console.error("Pet eklenirken hata oluştu:", error);
     }
@@ -156,7 +156,7 @@ const LandingPage = () => {
       {/* Pet Ekleme Modalı */}
       {isAddModalOpen && (
         <div className="modalOverlay">
-          <div className="modalContent">
+          <div className="modalContent p-8">
             <h2>Yeni Pet Ekle</h2>
             <input
               id="name"
