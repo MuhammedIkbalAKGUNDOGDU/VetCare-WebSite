@@ -108,7 +108,7 @@ const Shop = () => {
   };
 
   return (
-    <div>
+    <div className="p-8">
       <h1 className="text-2xl font-bold mb-4 mx-6">Choose a Category</h1>
       <select
         value={selectedCategory}

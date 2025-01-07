@@ -140,7 +140,7 @@ const LandingPage = () => {
         </div>
       </div>
 
-      <div className="landingPageOtherContainer">
+      <div className=" overflow-y-auto max-h-screen	 flex flex-wrap gap-4 justify-start mx-6">
         {pets.map((pet, index) => (
           <MypetProfilButton
             onClick={() => handlePetClick(pet)}
@@ -171,15 +171,22 @@ const LandingPage = () => {
                 onChange={handleInputChange}
               />
             </div>
+
             <div className="flex justify-center">
-              <input
-                className="p-2 border-2 rounded border-black mt-2"
+              <select
+                className="p-2 w-48 border-2 rounded border-black mt-2"
                 id="type"
-                type="text"
-                placeholder="Tür"
                 value={newPet.type}
                 onChange={handleInputChange}
-              />
+              >
+                <option value="">Tür Seçin</option>
+                <option value="Kedi">Kedi</option>
+                <option value="Köpek">Köpek</option>
+                <option value="Kuş">Kuş</option>
+                <option value="Balık">Balık</option>
+                <option value="Kaplumbağa">Kaplumbağa</option>
+                <option value="Hamster">Hamster</option>
+              </select>
             </div>
 
             <div className="flex justify-center">

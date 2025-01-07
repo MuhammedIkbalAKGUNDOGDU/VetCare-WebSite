@@ -40,15 +40,17 @@ const OrderHistory = () => {
   }
 
   return (
-    <div>
+    <div className="p-4">
       <h1 className="text-2xl font-bold mx-6 mt-6">Order History</h1>
-      {orders.length > 0 ? (
-        orders.map((product) => (
-          <ShopItem productInfo={product} key={product.ID} />
-        ))
-      ) : (
-        <p className="mx-6">Sipariş bulunamadı.</p>
-      )}
+      <div className="flex flex-wrap gap-4 justify-start mx-6">
+        {orders.length > 0 ? (
+          orders.map((product) => (
+            <ShopItem productInfo={product} key={product.ID} />
+          ))
+        ) : (
+          <p className="w-full text-center">Sipariş bulunamadı.</p>
+        )}
+      </div>
     </div>
   );
 };
