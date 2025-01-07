@@ -14,6 +14,24 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
     description: "",
   });
   const [vets, setVets] = useState([]); // Veteriner listesi için state
+  const [allVets, setAllVets] = useState([]); // Veteriner listesi için state
+
+  useEffect(() => {
+    if (isOpen) {
+      const fetchVets = async () => {
+        try {
+          const response = await axios.get(
+            "http://localhost:8081/vet/getAllVets"
+          );
+          console.log("Veteriner Listesi:", response.data.data);
+          setAllVets(response.data.data); // Gelen veriyi state'e ata
+        } catch (error) {
+          console.error("Veteriner verileri getirilirken hata oluştu:", error);
+        }
+      };
+      fetchVets();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -106,16 +124,6 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
               required
             />
 
-            {/* VetID giriş alanı */}
-            <input
-              type="number"
-              name="vetID"
-              placeholder="Vet ID (Manuel Giriş)"
-              value={formData.vetID}
-              onChange={handleChange}
-              className="border rounded-lg p-2"
-            />
-
             {/* Veteriner Seçim Dropdown */}
             <select
               name="vetID"
@@ -125,6 +133,22 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
               required
             >
               <option value="">Veteriner Seç</option>
+              {allVets.map((vet) => (
+                <option key={vet.vetID} value={vet.vetID}>
+                  {vet.shopName} - ⭐ {vet.starRate}
+                </option>
+              ))}
+            </select>
+
+            {/* Veteriner Seçim Dropdown */}
+            <select
+              name="vetID"
+              value={formData.vetID}
+              onChange={handleVetSelect}
+              className="border rounded-lg p-2"
+              required
+            >
+              <option value="">Önerilen Veterinerler</option>
               {vets.map((vet) => (
                 <option key={vet.vetID} value={vet.vetID}>
                   {vet.shopName} - ⭐ {vet.starRate}
