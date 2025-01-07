@@ -1,11 +1,12 @@
 import React from "react";
 import "../styles/mypetprofil.css";
+import porpfil from "../assets/images/pp.webp";
 
 const MypetProfilButton = ({ onClick, petInfo }) => {
   return (
     <div onClick={onClick} className="petProfilContainer">
       <div className="myPetProfilPhoto rounded-full">
-        <img src="" alt="" />
+        <img className="rounded-full overflow-hidden" src={porpfil} alt="" />
       </div>
       <div className="petinnerCont">
         <div className="flexrow spacebetwen">
@@ -13,8 +14,8 @@ const MypetProfilButton = ({ onClick, petInfo }) => {
           <p>Son Veteriner Tarihi : {petInfo.lastVetDate}</p>
         </div>
         <div className="flexrow">
-          <p>{petInfo.age}</p>
-          <p>{petInfo.type}</p>
+          <p>Yaş : {petInfo.age}</p>
+          <p>Tür : {petInfo.type}</p>
         </div>
       </div>
     </div>

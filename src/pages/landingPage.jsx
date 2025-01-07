@@ -156,67 +156,100 @@ const LandingPage = () => {
       {/* Pet Ekleme Modalı */}
       {isAddModalOpen && (
         <div className="modalOverlay">
-          <div className="modalContent p-8">
-            <h2>Yeni Pet Ekle</h2>
-            <input
-              id="name"
-              type="text"
-              placeholder="Pet Adı"
-              value={newPet.name}
-              onChange={handleInputChange}
-            />
-            <input
-              id="type"
-              type="text"
-              placeholder="Tür"
-              value={newPet.type}
-              onChange={handleInputChange}
-            />
-            <input
-              id="age"
-              type="number"
-              placeholder="Yaş"
-              value={newPet.age}
-              onChange={handleInputChange}
-            />
-            <p>Son Aşır Tarihi</p>
-            <input
-              id="lastVaccinationDate"
-              type="date"
-              placeholder="Son Aşı Tarihi"
-              value={newPet.lastVaccinationDate}
-              onChange={handleInputChange}
-            />
-            <p></p>
-            <input
-              id="vaccinationFreq"
-              type="number"
-              placeholder="Aşı Sıklığı (ay)"
-              value={newPet.vaccinationFreq}
-              onChange={handleInputChange}
-            />
-            <p>Son Veteriner Tarihi</p>
-            <input
-              id="lastVetDate"
-              type="date"
-              placeholder="Son Veteriner Tarihi"
-              value={newPet.lastVetDate}
-              onChange={handleInputChange}
-            />
-            <p></p>
-            <input
-              id="vetFreq"
-              type="number"
-              placeholder="Veteriner Sıklığı (ay)"
-              value={newPet.vetFreq}
-              onChange={handleInputChange}
-            />
-            <button className="ml-2" onClick={handleAddPet}>
-              Kaydet
-            </button>
-            <button className="ml-2" onClick={() => setIsAddModalOpen(false)}>
-              İptal
-            </button>
+          <div className="modalContent p-8 flex-column justify-center align-center">
+            <h2 className="text-center font-bold text-xl p-2">Yeni Pet Ekle</h2>
+            <div className="flex justify-center">
+              <input
+                id="name"
+                className="p-2 border-2 rounded border-black"
+                type="text"
+                placeholder="Pet Adı"
+                value={newPet.name}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex justify-center">
+              <input
+                className="p-2 border-2 rounded border-black mt-2"
+                id="type"
+                type="text"
+                placeholder="Tür"
+                value={newPet.type}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className="flex justify-center">
+              <input
+                className="p-2 border-2 rounded border-black mt-2 "
+                id="age"
+                type="number"
+                placeholder="Yaş"
+                value={newPet.age}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex justify-center">
+              <p className="font-bold text-m mt-2 text-center ">
+                Son Aşır Tarihi
+              </p>
+              <input
+                id="lastVaccinationDate"
+                type="date"
+                placeholder="Son Aşı Tarihi"
+                value={newPet.lastVaccinationDate}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex justify-center">
+              <p></p>
+              <input
+                className="p-2 border-2 rounded border-black mt-2"
+                id="vaccinationFreq"
+                type="number"
+                placeholder="Aşı Sıklığı (ay)"
+                value={newPet.vaccinationFreq}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex justify-center align-center">
+              <p className="font-bold text-m mt-2 text-center">
+                Son Veteriner Tarihi
+              </p>
+              <input
+                id="lastVetDate"
+                type="date"
+                placeholder="Son Veteriner Tarihi"
+                value={newPet.lastVetDate}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex justify-center">
+              <p></p>
+              <input
+                className="p-2 border-2 rounded border-black mt-2"
+                id="vetFreq"
+                type="number"
+                placeholder="Veteriner Sıklığı (ay)"
+                value={newPet.vetFreq}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="flex justify-center">
+              {" "}
+              <button
+                className="ml-2 p-2 mt-2 rounded-lg bg-green-500"
+                onClick={handleAddPet}
+              >
+                Kaydet
+              </button>
+              <button
+                className="ml-2 p-2 mt-2 px-4 rounded-lg bg-red-500"
+                onClick={() => setIsAddModalOpen(false)}
+              >
+                İptal
+              </button>
+            </div>
           </div>
         </div>
       )}
