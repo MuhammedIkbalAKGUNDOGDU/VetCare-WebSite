@@ -126,12 +126,15 @@ const LandingPage = () => {
           <p>Veri yükleniyor...</p>
         )}
 
-        <div onClick={() => navigate("/shop")} className="shopping">
+        <div
+          onClick={() => navigate("/shop")}
+          className="bg-orange-500 rounded-xl p-2 font-bold text-white  mt-6 cursor-pointer"
+        >
           Alışveriş Yap
         </div>
         <div
           onClick={() => setIsAddModalOpen(true)} // Pet ekleme modalını aç
-          className="shopping"
+          className="bg-orange-500 rounded-xl p-2 px-6 font-bold text-white mt-4 cursor-pointer"
         >
           Pet Ekle
         </div>
