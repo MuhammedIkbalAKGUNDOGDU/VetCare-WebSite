@@ -146,7 +146,7 @@ const VetModal = ({ isOpen, onClose, petInfo }) => {
               value={formData.vetID}
               onChange={handleVetSelect}
               className="border rounded-lg p-2"
-              required
+              
             >
               <option value="">Önerilen Veterinerler</option>
               {vets.map((vet) => (
